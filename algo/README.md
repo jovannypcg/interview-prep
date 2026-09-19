@@ -183,6 +183,7 @@ mvn test -Dtest="SolutionTest" -pl .
 | 082 | [Alien Dictionary](src/main/java/mx/jovannypcg/algo/p082_aliendictionary) | Graphs | ✅ |
 | 083 | [Meeting Rooms II](src/main/java/mx/jovannypcg/algo/p083_meetingrooms2) | Heap / Priority Queue | ✅ |
 | 084 | [Insert Interval](src/main/java/mx/jovannypcg/algo/p084_insertinterval) | Intervals | 💡 |
+| 085 | [Best Time to Buy and Sell Stocks](src/main/java/mx/jovannypcg/algo/p085_besttimetobuyandsellstock) | Two Pointers | ✅ |
 
 ✅ = solved independently · 💡 = viewed solution · 🔄 = in progress
 
