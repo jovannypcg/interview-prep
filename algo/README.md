@@ -184,6 +184,7 @@ mvn test -Dtest="SolutionTest" -pl .
 | 083 | [Meeting Rooms II](src/main/java/mx/jovannypcg/algo/p083_meetingrooms2) | Heap / Priority Queue | ✅ |
 | 084 | [Insert Interval](src/main/java/mx/jovannypcg/algo/p084_insertinterval) | Intervals | 💡 |
 | 085 | [Best Time to Buy and Sell Stocks](src/main/java/mx/jovannypcg/algo/p085_besttimetobuyandsellstock) | Two Pointers | ✅ |
+| 086 | [Longest Substring Without Repeating Characters](src/main/java/mx/jovannypcg/algo/p086_longestsubstringwithoutrepeating) | Sliding Window | ✅ |
 
 ✅ = solved independently · 💡 = viewed solution · 🔄 = in progress
 
