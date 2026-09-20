@@ -23,38 +23,27 @@ public class Solution {
         }
     }
 
-    /*
-    head = [1, 2, 3, 4, 5], n = 2
-            p
-            s
-            f
-
-    [1 2 3], n = 3
-     s
-           f
-   p
-
-    Note to self: when introducing a `prev` node, remember to bring up a `dummy` node
-                  to keep the reference to the original node.
-    */
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode slow = head;
-        ListNode fast = head;
-        ListNode dummy = new ListNode(-1, head);
-        ListNode prev = dummy;
+        if (head == null || n <= 0) return head;
 
-        while (fast != null && n > 0) {
-            fast = fast.next;
-            n--;
-        }
+        // dummy precedes head so removing the head itself is not a special case
+        ListNode dummy = new ListNode(-1, head),
+            prev = dummy,
+            slow = head,
+            fast = head;
 
+        // push fast n nodes ahead to create a fixed n-node gap to slow
+        for (; n > 0; n--) fast = fast.next;
+
+        // walk the gap to the end; slow lands exactly on the target node,
+        // prev on the node right before it
         while (fast != null) {
-            fast = fast.next;
-
-            prev = prev.next;
+            prev = slow;
             slow = slow.next;
+            fast = fast.next;
         }
 
+        // unlink slow (the nth-from-end node)
         prev.next = slow.next;
         slow.next = null;
 

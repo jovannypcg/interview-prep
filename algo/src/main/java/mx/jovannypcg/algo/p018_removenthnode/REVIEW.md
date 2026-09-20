@@ -1,89 +1,53 @@
-# Remove Nth Node From End of List — Review
-
 | | |
 |---|---|
-| **Solved on** | 2026-06-30 |
+| **Solved on** | 2026-09-20 |
 | **DSA Category** | Linked List |
-
----
 
 ## 1. Your Solution Assessment
 
-### Correctness
+**Correctness:** Correct on all cases, including single-node lists, head removal, tail removal, and lists with duplicate values (where the fix has to key off *position*, not value). The `head == null || n <= 0` guard is unreachable under the stated constraints (`1 <= n <= sz`, `sz >= 1`), but it's harmless defensive code, not a bug.
 
-Handles all cases correctly, including the trickiest edge case: removing the head node (when `n == sz`). The dummy sentinel makes this case fall through the same code path as any other removal — no special branch needed.
+**Code quality:** Clean, idiomatic single-pass two-pointer solution with a dummy node to avoid special-casing head removal. Compact multi-variable declaration reads fine here since all four pointers are tightly related.
 
-### Code Quality
+**Time complexity:** O(sz) — `fast` advances at most `sz` total steps across the initial offset loop and the `while` loop combined; every node is visited a constant number of times.
 
-Clean and readable. Variable names (`slow`, `fast`, `prev`, `dummy`) clearly communicate their roles. The two-phase structure (advance fast, then walk together) is easy to follow.
+**Space complexity:** O(1) — only a fixed number of pointers and one dummy node are allocated, regardless of list length.
 
-One minor note: after the second loop, `slow == prev.next` is always true, so `prev.next = slow.next` could be written as `prev.next = prev.next.next`. Your version is actually clearer — keeping `slow` explicit makes the intent obvious.
-
-### Key Insight from Your Notes
-
-> When introducing a `prev` pointer, remember to pair it with a `dummy` sentinel node.
-
-This is a crucial pattern. A `prev` pointer needs a valid starting position *before the first real node* to handle head removal uniformly. Without `dummy`, there's no node for `prev` to sit on when the target is the head — you'd need a special case. The dummy gives `prev` a stable anchor before the list begins, so removal always reads the same: `prev.next = slow.next`.
-
-### Complexity
-
-- **Time:** O(sz) — single pass through the list; fast pointer traverses at most `sz` nodes, slow pointer traverses at most `sz - n` nodes.
-- **Space:** O(1) — only four pointer variables regardless of list size.
-
-### Algorithm Trace
-
-Input: `head = [1, 2, 3, 4, 5]`, `n = 2`
-
-**Setup**
-```
-dummy → 1 → 2 → 3 → 4 → 5
-  P     S
-        F
-```
-
-**Phase 1 — advance F by n=2 steps**
-```
-dummy → 1 → 2 → 3 → 4 → 5
-  P     S
-                F
-```
-
-**Phase 2 — walk until F is null**
-```
-Step 1:
-dummy → 1 → 2 → 3 → 4 → 5
-        P   S
-                    F
-
-Step 2:
-dummy → 1 → 2 → 3 → 4 → 5
-            P   S
-                        F
-
-Step 3 (F goes null — stop):
-dummy → 1 → 2 → 3 → 4 → 5 → null
-                P   S
-                              F
-```
-
-**Removal:** `prev.next = slow.next` → node 3 now points to node 5; node 4 is unlinked.
+**Algorithm trace** (annotated array — two pointers)
+Input: `head = [1, 2, 3, 4, 5]`, `n = 2` (`prev` starts at the dummy node, before the array)
 
 ```
-1 → 2 → 3 → 5
+Advance fast 2 steps ahead of slow:
+[1, 2, 3, 4, 5]
+ S     F
+
+fast != null → shift prev/slow/fast right
+[1, 2, 3, 4, 5]
+ P  S     F
+
+fast != null → shift right again
+[1, 2, 3, 4, 5]
+    P  S     F
+
+fast != null → shift right again; fast falls off the list → stop
+[1, 2, 3, 4, 5]
+       P  S
 ```
-
-→ return `dummy.next` = node 1
-
----
+`prev` (value 3) → `slow` (value 4) → unlink: `prev.next = slow.next`
+→ return `[1, 2, 3, 5]`
 
 ## 2. Optimal Approach
 
-Your solution **is** the optimal approach. For completeness:
+This *is* the optimal approach: a single-pass two-pointer technique with a dummy node.
 
-Advance a `fast` pointer `n` steps ahead of `slow`. Walk both together until `fast` is null — at that point `slow` is exactly the node to remove. A `prev` pointer (anchored at a dummy sentinel) tracks the node before `slow` to perform the unlinking.
+- Point `fast` and `slow` at `head`, with `prev` at a `dummy` node placed before `head`.
+- Advance `fast` alone by `n` nodes, opening a fixed `n`-node gap between `fast` and `slow`.
+- Advance `prev`, `slow`, and `fast` together, one step at a time, until `fast` runs off the end of the list. Because the gap is fixed, `slow` now sits exactly on the node to remove, and `prev` sits on the node right before it.
+- Unlink `slow`: `prev.next = slow.next`.
+- Return `dummy.next` (handles the case where `head` itself was removed).
 
-- **Time:** O(sz) — single pass; each node visited at most once.
-- **Space:** O(1) — fixed number of pointers.
+**Time complexity:** O(sz) — one pass to open the gap, one pass to close it; no node is visited more than twice.
+**Space complexity:** O(1) — no auxiliary data structure, just a handful of pointers.
 
 ```java
 public ListNode removeNthFromEnd(ListNode head, int n) {
@@ -92,91 +56,84 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
     ListNode slow = head;
     ListNode fast = head;
 
-    while (fast != null && n > 0) {
+    for (int i = 0; i < n; i++) {
         fast = fast.next;
-        n--;
     }
 
     while (fast != null) {
-        fast = fast.next;
-        prev = prev.next;
+        prev = slow;
         slow = slow.next;
+        fast = fast.next;
     }
 
     prev.next = slow.next;
-    slow.next = null;
 
     return dummy.next;
 }
 ```
 
-**Algorithm Trace** — same as above (your solution is optimal).
-
----
+**Algorithm trace:** identical to the trace in section 1 — this is the approach the user implemented.
 
 ## 3. Alternative Approaches
 
-### Two-Pass: Count Length, Then Remove
+### 3.1 Two-pass counting
+Traverse once to count the list length `sz`, then traverse again to the node just before index `sz - n` (0-indexed from the front) and unlink its successor.
 
-Traverse the list once to count its length `sz`. The node to remove is at position `sz - n` from the front (0-indexed). Traverse again to that position and unlink it.
+- **Time:** O(sz) — two full traversals, still linear.
+- **Space:** O(1) — no extra structures.
+- **When acceptable:** A natural fallback if the single-pass trick doesn't come to mind under interview pressure; still meets the optimal time complexity, just with a larger constant factor.
 
-- **Time:** O(sz) — two full passes.
-- **Space:** O(1) — only a counter and a couple of pointers.
-
-When acceptable: straightforward to reason about and implement under time pressure; same asymptotic complexity as the one-pass approach.
-
-```java
-public ListNode removeNthFromEnd(ListNode head, int n) {
-    ListNode dummy = new ListNode(-1, head);
-    int size = 0;
-    ListNode curr = head;
-
-    while (curr != null) {
-        size++;
-        curr = curr.next;
-    }
-
-    int stepsFromFront = size - n;
-    ListNode prev = dummy;
-
-    for (int i = 0; i < stepsFromFront; i++) {
-        prev = prev.next;
-    }
-
-    ListNode target = prev.next;
-    prev.next = target.next;
-    target.next = null;
-
-    return dummy.next;
-}
-```
-
-**Algorithm Trace**
-
+**Algorithm trace** (step table — iterative loop)
 Input: `head = [1, 2, 3, 4, 5]`, `n = 2`
 
-Pass 1 — count length:
+| Step | Action | sz | target index (0-indexed, from front) | pointer position |
+|---|---|---|---|---|
+| 1 | Count nodes | 5 | — | — |
+| 2 | Walk `sz - n - 1 = 2` steps from dummy | — | 3 | at value 3 |
+| 3 | Unlink | — | — | `prev.next = prev.next.next` (skips value 4) |
 
-| Step | Node | size |
-|------|------|------|
-| 1 | 1 | 1 |
-| 2 | 2 | 2 |
-| 3 | 3 | 3 |
-| 4 | 4 | 4 |
-| 5 | 5 | 5 |
+→ return `[1, 2, 3, 5]`
 
-`stepsFromFront = 5 - 2 = 3`
+### 3.2 Recursive (count from the tail)
+Recurse to the end of the list, then unwind while incrementing a counter; when the counter equals `n`, the *current* frame's node is the one to remove, so splice it out via the caller's `next` reference (commonly done with an `int[1]` counter or a small wrapper class, since Java can't return two values).
 
-Pass 2 — walk 3 steps from dummy:
+- **Time:** O(sz) — every node is visited once on the way down and once on the way up.
+- **Space:** O(sz) — the call stack grows with list length (not O(1), unlike the iterative versions).
+- **When acceptable:** Fine for small lists (this problem caps `sz` at 30) or when demonstrating recursive thinking; risky for very long lists due to stack depth.
 
-```
-dummy → 1 → 2 → 3 → 4 → 5
-  P
-Step 1:  P=1
-Step 2:  P=2
-Step 3:  P=3   target=4
-```
+**Algorithm trace** (call stack table)
+Input: `head = [1, 2, 3, 4, 5]`, `n = 2`, `helper(node)` returns the node's distance from the end
 
-`prev.next = target.next` → node 3 points to node 5.
+| Depth | Call | Returns / Action |
+|---|---|---|
+| 0 | helper(1) | waits on helper(2) |
+| 1 | helper(2) | waits on helper(3) |
+| 2 | helper(3) | waits on helper(4) |
+| 3 | helper(4) | waits on helper(5) |
+| 4 | helper(5) | waits on helper(null) |
+| 5 | helper(null) | returns 0 |
+| 4 | helper(5) | returns 1 |
+| 3 | helper(4) | returns 2 → **count == n** → unlink: `node(3).next = node(5)` |
+| 2 | helper(3) | returns 3 |
+| 1 | helper(2) | returns 4 |
+| 0 | helper(1) | returns 5 |
+
+→ return `head` (value 1); list is now `[1, 2, 3, 5]`
+
+### 3.3 Convert to array, remove, rebuild
+Walk the list once collecting values into an array/list, remove the element at index `sz - n`, then build a brand-new linked list from what remains.
+
+- **Time:** O(sz) — one pass to collect, one pass to rebuild.
+- **Space:** O(sz) — the intermediate array/list plus the rebuilt nodes.
+- **When acceptable:** Fastest to write correctly under time pressure since there's no pointer-surgery to get wrong, but wasteful in production code and loses the original node objects (a problem if callers hold references to them).
+
+**Algorithm trace** (step table)
+Input: `head = [1, 2, 3, 4, 5]`, `n = 2`
+
+| Step | Action | Result |
+|---|---|---|
+| 1 | Collect values | `[1, 2, 3, 4, 5]` |
+| 2 | Remove index `sz - n = 3` | `[1, 2, 3, 5]` |
+| 3 | Rebuild linked list | `1 → 2 → 3 → 5` |
 
 → return `[1, 2, 3, 5]`

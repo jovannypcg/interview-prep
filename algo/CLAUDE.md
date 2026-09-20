@@ -37,7 +37,7 @@ mx.jovannypcg.algo.p<NNN>_<problemname>
    `src/main/java/mx/jovannypcg/algo/p<NNN>_<name>/README.md`
    - Include the **date** the problem was added to the repository (use today's date).
    - Include the full **problem description** in readable prose (complement to the Javadoc).
-   - Include **up to 5 input/output examples** with an explanation for each, in this format:
+   - Include **7 varied input/output examples** with an explanation for each, in this format. "Varied" means the 7 examples should span different levels of difficulty and/or input length (e.g., trivial/minimal input, a small typical case, an edge case, and progressively larger or trickier cases) — not 7 minor variations of the same scenario.
      ```
      Input: nums = [2,7,11,15], target = 9
      Output: [0,1]
