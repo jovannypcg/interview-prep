@@ -187,6 +187,7 @@ mvn test -Dtest="SolutionTest" -pl .
 | 086 | [Longest Substring Without Repeating Characters](src/main/java/mx/jovannypcg/algo/p086_longestsubstringwithoutrepeating) | Sliding Window | ✅ |
 | 087 | [Linked List Cycle Detection](src/main/java/mx/jovannypcg/algo/p087_linkedlistcycledetection) | Linked List | ✅ |
 | 088 | [Linked List Cycle II](src/main/java/mx/jovannypcg/algo/p088_linkedlistcycle2) | Linked List | ✅ |
+| 089 | [Reorder List](src/main/java/mx/jovannypcg/algo/p089_reorderlist) | Linked List | ✅ |
 
 ✅ = solved independently · 💡 = viewed solution · 🔄 = in progress
 
