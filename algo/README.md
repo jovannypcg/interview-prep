@@ -188,6 +188,7 @@ mvn test -Dtest="SolutionTest" -pl .
 | 087 | [Linked List Cycle Detection](src/main/java/mx/jovannypcg/algo/p087_linkedlistcycledetection) | Linked List | ✅ |
 | 088 | [Linked List Cycle II](src/main/java/mx/jovannypcg/algo/p088_linkedlistcycle2) | Linked List | ✅ |
 | 089 | [Reorder List](src/main/java/mx/jovannypcg/algo/p089_reorderlist) | Linked List | ✅ |
+| 090 | [Add Two Numbers](src/main/java/mx/jovannypcg/algo/p090_addtwonumbers) | Linked List | ✅ |
 
 ✅ = solved independently · 💡 = viewed solution · 🔄 = in progress
 
