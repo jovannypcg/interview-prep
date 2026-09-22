@@ -189,6 +189,7 @@ mvn test -Dtest="SolutionTest" -pl .
 | 088 | [Linked List Cycle II](src/main/java/mx/jovannypcg/algo/p088_linkedlistcycle2) | Linked List | ✅ |
 | 089 | [Reorder List](src/main/java/mx/jovannypcg/algo/p089_reorderlist) | Linked List | ✅ |
 | 090 | [Add Two Numbers](src/main/java/mx/jovannypcg/algo/p090_addtwonumbers) | Linked List | ✅ |
+| 091 | [Find the Duplicate Number](src/main/java/mx/jovannypcg/algo/p091_findduplicatenumber) | Two Pointers | ✅ |
 
 ✅ = solved independently · 💡 = viewed solution · 🔄 = in progress
 
