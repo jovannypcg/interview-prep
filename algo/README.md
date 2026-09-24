@@ -190,6 +190,7 @@ mvn test -Dtest="SolutionTest" -pl .
 | 089 | [Reorder List](src/main/java/mx/jovannypcg/algo/p089_reorderlist) | Linked List | ✅ |
 | 090 | [Add Two Numbers](src/main/java/mx/jovannypcg/algo/p090_addtwonumbers) | Linked List | ✅ |
 | 091 | [Find the Duplicate Number](src/main/java/mx/jovannypcg/algo/p091_findduplicatenumber) | Two Pointers | ✅ |
+| 092 | [Kth Largest Element in an Array](src/main/java/mx/jovannypcg/algo/p092_kthlargestelementinanarray) | Heap / Priority Queue | ✅ |
 
 ✅ = solved independently · 💡 = viewed solution · 🔄 = in progress
 
